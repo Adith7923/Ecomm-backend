@@ -7,10 +7,17 @@ const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/product');
 
 const app = express();
-app.use(cors());
+
+// 👇 Setup CORS for frontend
+const corsOptions = {
+  origin: 'https://ecomm-frontend-af11.onrender.com', 
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
-// Optional: Health check route
+// Health check
 app.get('/', (req, res) => {
   res.send('🚀 Backend is live!');
 });
@@ -18,7 +25,7 @@ app.get('/', (req, res) => {
 app.use('/api', authRoutes);
 app.use('/api/products', productRoutes);
 
-// ✅ Correct port usage
+// Dynamic port for Render
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(process.env.MONGO_URI)
